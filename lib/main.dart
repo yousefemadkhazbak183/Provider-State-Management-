@@ -32,7 +32,7 @@ class MyHomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final int count = context.watch<CounterController>().count;
+    print('build');
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
@@ -44,7 +44,14 @@ class MyHomePage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             const Text('You have pushed the button this many times:'),
-            Text('$count', style: Theme.of(context).textTheme.headlineMedium),
+            Consumer<CounterController>(
+              builder: (BuildContext context, value, Widget? child) {
+                return Text(
+                  value.count.toString(),
+                  style: Theme.of(context).textTheme.headlineMedium,
+                );
+              },
+            ),
           ],
         ),
       ),
