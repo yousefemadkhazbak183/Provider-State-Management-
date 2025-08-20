@@ -19,20 +19,20 @@ class MyApp extends StatelessWidget {
       ),
       home: ChangeNotifierProvider(
         create: (context) => CounterController(),
-        child: const MyHomePage(title: 'Flutter Demo Home Page'),
+        child: MyHomePage(title: 'Flutter Demo Home Page'),
       ),
     );
   }
 }
 
 class MyHomePage extends StatelessWidget {
-  const MyHomePage({super.key, required this.title});
+  MyHomePage({super.key, required this.title});
 
   final String title;
+  TextEditingController textEditingController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    print('build');
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
@@ -43,13 +43,38 @@ class MyHomePage extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Text('You have pushed the button this many times:'),
-            Consumer<CounterController>(
+            TextField(controller: textEditingController),
+            Selector<CounterController, String?>(
+              selector: (BuildContext context, controller) {
+                return controller.name;
+              },
               builder: (BuildContext context, value, Widget? child) {
                 return Text(
-                  value.count.toString(),
+                  value ?? "",
                   style: Theme.of(context).textTheme.headlineMedium,
                 );
+              },
+            ),
+            SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: () {
+                context.read<CounterController>().setName(
+                  textEditingController.text,
+                );
+              },
+              child: Text('Set User Name'),
+            ),
+            SizedBox(height: 20),
+            const Text('You have pushed the button this many times:'),
+            Selector<CounterController, int>(
+              builder: (BuildContext context, value, Widget? child) {
+                return Text(
+                  value.toString(),
+                  style: Theme.of(context).textTheme.headlineMedium,
+                );
+              },
+              selector: (BuildContext context, controller) {
+                return controller.count;
               },
             ),
           ],
