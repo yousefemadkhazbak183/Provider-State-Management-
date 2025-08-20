@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:provider_state_management/counter_controller.dart';
+import 'package:provider_state_management/theme_controller.dart';
 
 void main() {
   runApp(const MyApp());
@@ -17,8 +18,11 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
-      home: ChangeNotifierProvider(
-        create: (context) => CounterController(),
+      home: MultiProvider(
+        providers: [
+          ChangeNotifierProvider(create: (context) => CounterController()),
+          ChangeNotifierProvider(create: (_) => ThemeController()),
+        ],
         child: MyHomePage(title: 'Flutter Demo Home Page'),
       ),
     );
